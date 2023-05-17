@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import decorators, permissions, status, viewsets
+from rest_framework import decorators, mixins, permissions, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
@@ -9,7 +9,12 @@ from .serializers import (ChangePasswordSerializer, TokenSerializer,
                           UserSerializer)
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    viewsets.GenericViewSet
+):
     """
     ViewSet для модели User.
     """
