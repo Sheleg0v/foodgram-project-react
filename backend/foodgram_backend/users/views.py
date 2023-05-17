@@ -10,6 +10,9 @@ from .serializers import (ChangePasswordSerializer, TokenSerializer,
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet для модели User.
+    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
     pagination_class = LimitOffsetPagination
@@ -23,6 +26,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
 @decorators.api_view(['POST'])
 def get_token(request):
+    """
+    Получение токена аутентификации для пользователя.
+    """
     serializer = TokenSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     user = get_object_or_404(
@@ -36,6 +42,9 @@ def get_token(request):
 @decorators.api_view(['POST'])
 @decorators.permission_classes([permissions.IsAuthenticated])
 def delete_token(request):
+    """
+    Удаление токена аутентификации пользователя.
+    """
     user = request.user
     get_object_or_404(Token, user=user).delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
@@ -44,6 +53,9 @@ def delete_token(request):
 @decorators.api_view(['GET'])
 @decorators.permission_classes([permissions.IsAuthenticated])
 def user_me(request):
+    """
+    Получение информации о текущем пользователе.
+    """
     user = request.user
     serializer = UserSerializer(user, context={'request': request})
     return Response(serializer.data)
@@ -52,6 +64,9 @@ def user_me(request):
 @decorators.api_view(['POST'])
 @decorators.permission_classes([permissions.IsAuthenticated])
 def change_password(request):
+    """
+    Изменение пароля текущего пользователя.
+    """
     serializer = ChangePasswordSerializer(
         data=request.data,
         context={'request': request}
@@ -61,6 +76,6 @@ def change_password(request):
     user.set_password(serializer.validated_data['new_password'])
     user.save()
     return Response(
-        {'detail': 'Password changed successfully.'},
+        {'detail': 'Пароль успешно изменен.'},
         status=status.HTTP_204_NO_CONTENT
     )
