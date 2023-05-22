@@ -34,6 +34,18 @@ class User(AbstractUser):
         verbose_name='Пароль'
     )
 
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['username', 'email'], name='unique_username_email'
+            )
+        ]
+
+    def __str__(self):
+        return self.username
+
 
 class Subscription(models.Model):
     author = models.ForeignKey(
@@ -48,3 +60,7 @@ class Subscription(models.Model):
         verbose_name='Подписчик',
         related_name='subscribed_on'
     )
+
+    class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
