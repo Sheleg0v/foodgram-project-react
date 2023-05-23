@@ -1,4 +1,3 @@
-from core.serializers import ShortRecipeSerializer
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password, make_password
@@ -123,13 +122,15 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         )
 
     def get_is_subscribed(self, obj):
-        return True
+        if obj:
+            return True
 
     def get_recipes(self, obj):
         limit = self.context.get('request').GET.get('recipes_limit')
         recipe_obj = obj.author.recipe.all()
         if limit:
             recipe_obj = recipe_obj[:int(limit)]
+        from api.serializers import ShortRecipeSerializer
         serializer = ShortRecipeSerializer(
             recipe_obj, many=True, context=self.context
         )

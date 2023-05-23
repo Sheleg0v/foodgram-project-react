@@ -1,14 +1,24 @@
-from core.pagination import PageLimitPagination
 from django.shortcuts import get_object_or_404
-from rest_framework import (decorators, exceptions, mixins, permissions,
-                            status, viewsets)
+from rest_framework import (
+    decorators,
+    exceptions,
+    mixins,
+    permissions,
+    status,
+    viewsets
+)
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
 from .models import Subscription, User
-from .serializers import (ChangePasswordSerializer, SubscribeSerializer,
-                          SubscriptionSerializer, TokenSerializer,
-                          UserSerializer)
+from .serializers import (
+    ChangePasswordSerializer,
+    SubscribeSerializer,
+    SubscriptionSerializer,
+    TokenSerializer,
+    UserSerializer
+)
+from core.pagination import PageLimitPagination
 
 
 class UserViewSet(
@@ -83,7 +93,7 @@ class SubscribeViewSet(
         if Subscription.objects.filter(
             author=author, subscriber=self.request.user
         ):
-            raise exceptions.ValidationError("You already subscribed")
+            raise exceptions.ValidationError('You already subscribed')
         serializer.save(author=author, subscriber=self.request.user)
 
     def get_object(self):
@@ -91,7 +101,7 @@ class SubscribeViewSet(
         if not Subscription.objects.filter(
             author=author, subscriber=self.request.user
         ):
-            raise exceptions.ValidationError("You are not subscribed")
+            raise exceptions.ValidationError('You are not subscribed')
         return Subscription.objects.get(
             author=author, subscriber=self.request.user
         )

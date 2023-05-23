@@ -1,12 +1,16 @@
 import base64
 
-from core.serializers import ShortRecipeSerializer
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
-from recipes.models import (Ingredient, Recipe, RecipeIngredient, RecipeUser,
-                            Tag)
 from rest_framework import exceptions, serializers
 
+from recipes.models import (
+    Ingredient,
+    Recipe,
+    RecipeIngredient,
+    RecipeUser,
+    Tag
+)
 from users.serializers import UserSerializer
 
 
@@ -37,9 +41,11 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 class Base64ImageField(serializers.ImageField):
     def to_internal_value(self, data):
         if isinstance(data, str) and data.startswith('data:image'):
-            format, imgstr = data.split(';base64,')
+            format, imgagestring = data.split(';base64,')
             ext = format.split('/')[-1]
-            data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+            data = ContentFile(
+                base64.b64decode(imgagestring), name=f'temp.{ext}'
+            )
         return super().to_internal_value(data)
 
 
@@ -174,6 +180,12 @@ class IsFavoritedSerializer(serializers.ModelSerializer):
         obj.is_favorited = True
         obj.save()
         return obj
+
+
+class ShortRecipeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = ('id', 'name', 'image', 'cooking_time')
 
 
 class IsInShoppingCartSerializer(serializers.ModelSerializer):

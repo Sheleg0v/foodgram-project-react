@@ -1,17 +1,28 @@
-from core.pagination import PageLimitPagination
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from recipes.models import Ingredient, Recipe, RecipeUser, Tag
-from rest_framework import (decorators, exceptions, mixins, permissions,
-                            status, viewsets)
+from rest_framework import (
+    decorators,
+    exceptions,
+    mixins,
+    permissions,
+    status,
+    viewsets
+)
 from rest_framework.response import Response
 
 from .filters import IngredientFilter, RecipeFilter
 from .permissions import IsAuthor
-from .serializers import (IngredientSerializer, IsFavoritedSerializer,
-                          IsInShoppingCartSerializer, RecipeReadSerializer,
-                          RecipeWriteSerializer, TagSerializer)
+from .serializers import (
+    IngredientSerializer,
+    IsFavoritedSerializer,
+    IsInShoppingCartSerializer,
+    RecipeReadSerializer,
+    RecipeWriteSerializer,
+    TagSerializer
+)
+from core.pagination import PageLimitPagination
 
 
 class TagViewSet(
@@ -48,10 +59,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ('list', 'retrieve'):
             return (permissions.AllowAny(),)
-        elif self.action == 'create':
+        if self.action == 'create':
             return (permissions.IsAuthenticated(),)
-        else:
-            return (IsAuthor(),)
+        return (IsAuthor(),)
 
 
 class IsFavoritedViewSet(
@@ -91,7 +101,7 @@ class IsInShoppingCartViewSet(
     permission_classes = (permissions.IsAuthenticated,)
 
     def perform_destroy(self, instance):
-        if instance.is_in_shopping_cart is False:
+        if not instance.is_in_shopping_cart:
             raise exceptions.ValidationError(
                 "This recipe is not in shopping cart"
             )
@@ -112,6 +122,15 @@ class IsInShoppingCartViewSet(
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+def form_list(ingredient_total):
+    return "\n".join([
+        f"{ingredient['recipe__ingredients__name']} - "
+        f"{ingredient['total_amount']} "
+        f"{ingredient['recipe__ingredients__measurement_unit']}"
+        for ingredient in ingredient_total
+    ])
+
+
 @decorators.api_view(['GET'])
 @decorators.permission_classes([permissions.IsAuthenticated])
 def download_shopping_cart_view(request):
@@ -124,14 +143,11 @@ def download_shopping_cart_view(request):
         'recipe__ingredients__name', 'recipe__ingredients__measurement_unit'
     ).annotate(total_amount=Sum('recipe__recipeingredient__amount'))
 
-    content = "\n".join([
-        f"{ingredient['recipe__ingredients__name']} - "
-        f"{ingredient['total_amount']} "
-        f"{ingredient['recipe__ingredients__measurement_unit']}"
-        for ingredient in ingredient_total
-    ])
+    content = form_list(ingredient_total)
 
     response = HttpResponse(content, content_type='text/plain')
-    response['Content-Disposition'] = \
+    response['Content-Disposition'] = (
         'attachment; filename="shopping_cart.txt"'
+    )
+
     return response

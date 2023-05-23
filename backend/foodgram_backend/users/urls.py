@@ -1,8 +1,15 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .views import (SubscribeViewSet, SubscriptionViewSet, UserViewSet,
-                    change_password, delete_token, get_token, user_me)
+from .views import (
+    SubscribeViewSet,
+    SubscriptionViewSet,
+    UserViewSet,
+    change_password,
+    delete_token,
+    get_token,
+    user_me
+)
 
 router = DefaultRouter()
 router.register(

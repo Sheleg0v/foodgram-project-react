@@ -6,7 +6,7 @@ User = get_user_model()
 
 class Tag(models.Model):
     name = models.CharField(
-        max_length=25,
+        max_length=30,
         verbose_name='Название'
     )
     color = models.CharField(
@@ -14,7 +14,7 @@ class Tag(models.Model):
         verbose_name='Цвет'
     )
     slug = models.SlugField(
-        max_length=25,
+        max_length=30,
         verbose_name='Слаг',
         unique=True
     )
@@ -28,12 +28,12 @@ class Tag(models.Model):
 
 
 class Ingredient(models.Model):
-    name = models.CharField(
-        max_length=25,
+    name = models.TextField(
+        max_length=100,
         verbose_name='Название'
     )
     measurement_unit = models.CharField(
-        max_length=10,
+        max_length=30,
         verbose_name='Еденицы измерения'
     )
 
@@ -64,7 +64,7 @@ class Recipe(models.Model):
         verbose_name='Ингридиенты'
     )
     name = models.CharField(
-        max_length=25,
+        max_length=30,
         verbose_name='Название'
     )
     image = models.ImageField(
@@ -72,16 +72,16 @@ class Recipe(models.Model):
         verbose_name='Изображение'
     )
     text = models.TextField('Текст')
-    cooking_time = models.SmallIntegerField('Время приготовления')
+    cooking_time = models.PositiveSmallIntegerField('Время приготовления')
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Ингредиент'
-        verbose_name_plural = 'Ингредиенты'
+        verbose_name = 'Рецепт'
+        verbose_name_plural = 'Рецепты'
         ordering = ('pub_date',)
 
     def __str__(self):
-        return self.text[:15]
+        return self.name
 
 
 class RecipeTag(models.Model):
@@ -101,7 +101,7 @@ class RecipeIngredient(models.Model):
     ingredient = models.ForeignKey(
         Ingredient, on_delete=models.CASCADE, related_name='recipe_ingredient'
     )
-    amount = models.SmallIntegerField('Количество')
+    amount = models.PositiveSmallIntegerField('Количество')
 
     class Meta:
         constraints = [

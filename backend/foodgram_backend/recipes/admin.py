@@ -1,8 +1,14 @@
 from django.contrib import admin
 from django.db.models import Count, Q
 
-from .models import (Ingredient, Recipe, RecipeIngredient, RecipeTag,
-                     RecipeUser, Tag)
+from .models import (
+    Ingredient,
+    Recipe,
+    RecipeIngredient,
+    RecipeTag,
+    RecipeUser,
+    Tag
+)
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -27,6 +33,7 @@ class RecipeAdmin(admin.ModelAdmin):
 
     def favorite_count(self, obj):
         return obj.favorite_count
+
     favorite_count.short_description = 'Число добавлений в избранное'
 
 
