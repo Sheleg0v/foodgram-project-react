@@ -10,10 +10,7 @@ services:
       - db_data:/var/lib/postgresql/data/
 
   web:
-    # image: sheleg0v/foodgram:v1
-    build:
-      context: ../backend/foodgram_backend
-      dockerfile: Dockerfile
+    image: sheleg0v/foodgram:v2
     restart: always
     volumes:
       - static_value:/app/static/
