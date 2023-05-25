@@ -7,7 +7,7 @@ from django.db import migrations
 
 def load_ingredients(apps, schema_editor):
     Ingredient = apps.get_model('recipes', 'Ingredient')
-    file_path = os.path.join('..', '..', 'data', 'ingredients.csv')
+    file_path = os.path.join('fixtures', 'ingredients.csv')
     with open(file_path, encoding='utf-8') as file:
         reader = csv.reader(file)
         for name, measurement_unit in reader:
