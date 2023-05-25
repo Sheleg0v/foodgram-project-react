@@ -49,7 +49,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     http_method_names = ('get', 'post', 'patch', 'delete')
     pagination_class = PageLimitPagination
     filterset_class = RecipeFilter
-    ordering_fields = ('pub_date',)
+    ordering_fields = ('-pub_date',)
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
