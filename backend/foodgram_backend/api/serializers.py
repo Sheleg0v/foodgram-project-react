@@ -284,7 +284,6 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         recipe_obj = obj.author.recipe.all()
         if limit:
             recipe_obj = recipe_obj[:int(limit)]
-        from api.serializers import ShortRecipeSerializer
         serializer = ShortRecipeSerializer(
             recipe_obj, many=True, context=self.context
         )
