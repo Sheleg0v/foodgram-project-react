@@ -9,7 +9,13 @@ Interaction with the database is carried out through the Api.
 The list of requests and endpoints is described in the ReDoc documentation, available at:
 
 ```
-http://127.0.0.1:8000/redoc/
+http://84.201.173.65/redoc/
+```
+
+## Project launched at:
+
+```
+http://84.201.173.65/
 ```
 
 ## Stack:
