@@ -23,20 +23,20 @@ class User(AbstractUser):
     )
     first_name = models.CharField(
         max_length=settings.FIRST_NAME_LENGTH,
-        verbose_name='Имя'
+        verbose_name='First name'
     )
     last_name = models.CharField(
         max_length=settings.LAST_NAME_LENGTH,
-        verbose_name='Фамилия'
+        verbose_name='Last name'
     )
     password = models.CharField(
         max_length=settings.PASSWORD_LENGTH,
-        verbose_name='Пароль'
+        verbose_name='Password'
     )
 
     class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
         constraints = [
             models.UniqueConstraint(
                 fields=['username', 'email'], name='unique_username_email'
@@ -51,16 +51,16 @@ class Subscription(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='Автор',
+        verbose_name='Author',
         related_name='subscribers'
     )
     subscriber = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='Подписчик',
+        verbose_name='Subscriber',
         related_name='subscribed_on'
     )
 
     class Meta:
-        verbose_name = 'Подписка'
-        verbose_name_plural = 'Подписки'
+        verbose_name = 'Subscription'
+        verbose_name_plural = 'Subscriptions'

@@ -17,7 +17,7 @@ class TagAdmin(admin.ModelAdmin):
 
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'measurement_unit')
-    list_filter = ('name',)
+    search_fields = ('name',)
 
 
 class RecipeAdmin(admin.ModelAdmin):
@@ -34,7 +34,7 @@ class RecipeAdmin(admin.ModelAdmin):
     def favorite_count(self, obj):
         return obj.favorite_count
 
-    favorite_count.short_description = 'Число добавлений в избранное'
+    favorite_count.short_description = 'In favorite, times'
 
 
 class RecipeTagAdmin(admin.ModelAdmin):
